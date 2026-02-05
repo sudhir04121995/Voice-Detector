@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - AI Voice Detector</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-robot"></i>
+                <h1>AI Voice Detector</h1>
+            </div>
+            <p class="tagline">Detect AI-generated voices and identify languages instantly</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="upload-section">
+                <div class="upload-card">
+                    <div class="upload-icon">
+                        <i class="fas fa-microphone-alt"></i>
+                    </div>
+                    <h2>Upload Audio File</h2>
+                    <p class="upload-description">
+                        Upload an audio file to analyze if it's AI-generated or human, 
+                        and detect its language automatically.
+                    </p>
+                    
+                    <form id="uploadForm" action="/upload-audio" method="post" enctype="multipart/form-data">
+                        <div class="file-upload-area" id="dropArea">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Drag & drop your audio file here</p>
+                            <p class="file-types">or click to browse</p>
+                            <input type="file" id="audioFile" name="audio_file" accept="audio/*" required>
+                            <div class="file-info" id="fileInfo"></div>
+                        </div>
+                        
+                        <div class="language-hint">
+                            <label for="languageHint">
+                                <i class="fas fa-language"></i> Language Hint (Optional)
+                            </label>
+                            <select id="languageHint" name="language_hint">
+                                <option value="">Auto-detect language</option>
+                                {% for code, info in languages.items() %}
+                                <option value="{{ code }}">{{ info.name }} ({{ code|upper }})</option>
+                                {% endfor %}
+                            </select>
+                            <p class="hint-text">Providing a language hint can improve detection accuracy</p>
+                        </div>
+                        
+                        <button type="submit" class="analyze-btn">
+                            <i class="fas fa-search"></i> Analyze Voice
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="info-section">
+                    <h3><i class="fas fa-info-circle"></i> How It Works</h3>
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <h4>Upload Audio</h4>
+                            <p>Upload MP3, WAV, M4A, or OGG files (max 10MB)</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <h4>Automatic Analysis</h4>
+                            <p>AI analyzes 20+ audio features for language and authenticity</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <h4>Get Results</h4>
+                            <p>Receive detailed report on language and AI detection</p>
+                        </div>
+                    </div>
+                    
+                    <div class="supported-languages">
+                        <h4><i class="fas fa-globe-asia"></i> Supported Languages</h4>
+                        <div class="language-tags">
+                            {% for code, info in languages.items() %}
+                            <span class="language-tag" title="{{ info.region }} · {{ info.speakers }} speakers">
+                                {{ info.name }}
+                            </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>AI Voice Detection System v2.0.0</p>
+            <p class="api-info">
+                <i class="fas fa-code"></i> 
+                <a href="/api/docs">API Documentation</a> | 
+                <a href="/api/health">Health Check</a>
+            </p>
+        </footer>
+    </div>
+
+    <!-- Audio Preview Modal -->
+    <div id="audioModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Audio Preview</h3>
+            <audio id="audioPlayer" controls></audio>
+        </div>
+    </div>
+
+    <script src="/static/js/script.js"></script>
+</body>
+</html>

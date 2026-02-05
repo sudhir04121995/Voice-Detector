@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - Analysis Results</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-robot"></i>
+                <h1>AI Voice Detector</h1>
+            </div>
+            <a href="/" class="back-btn">
+                <i class="fas fa-arrow-left"></i> New Analysis
+            </a>
+        </header>
+
+        <!-- Results Content -->
+        <main class="results-content">
+            <div class="results-header">
+                <h2><i class="fas fa-chart-line"></i> Analysis Results</h2>
+                <div class="file-info">
+                    <p><strong>File:</strong> {{ result.filename }}</p>
+                    <p><strong>Size:</strong> {{ result.file_size }}</p>
+                    <p><strong>Analyzed:</strong> {{ result.upload_time }}</p>
+                </div>
+            </div>
+
+            <!-- Audio Player -->
+            <div class="audio-player-section">
+                <h3><i class="fas fa-play-circle"></i> Audio Preview</h3>
+                <div class="audio-player">
+                    <audio controls>
+                        <source src="{{ audio_data_url }}" type="{{ audio_type }}">
+                        Your browser does not support the audio element.
+                    </audio>
+                    <div class="audio-info">
+                        <p><i class="fas fa-fingerprint"></i> Audio ID: {{ result.audio_hash }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Grid (same as before, but shortened for brevity) -->
+            <!-- Language Detection Card -->
+            <div class="result-card language-card">
+                <div class="card-header">
+                    <i class="fas fa-language"></i>
+                    <h3>Language Detection</h3>
+                </div>
+                <div class="card-body">
+                    <div class="detected-language">
+                        <div class="language-icon">
+                            <i class="fas fa-globe-americas"></i>
+                        </div>
+                        <div class="language-info">
+                            <h4>{{ result.language_name }} ({{ result.detected_language|upper }})</h4>
+                            <p class="confidence">
+                                <i class="fas fa-bullseye"></i> 
+                                Confidence: <span class="conf-value">{{ result.confidence }}%</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI/Human Detection Card -->
+            <div class="result-card ai-card">
+                <div class="card-header">
+                    {% if result.classification == "Human" or result.classification == "Likely Human" %}
+                    <i class="fas fa-user-check" style="color: #4CAF50;"></i>
+                    {% else %}
+                    <i class="fas fa-robot" style="color: #f44336;"></i>
+                    {% endif %}
+                    <h3>Authenticity Analysis</h3>
+                </div>
+                <div class="card-body">
+                    <div class="detection-result">
+                        <div class="result-badge {{ 'human-badge' if 'Human' in result.classification else 'ai-badge' }}">
+                            <h2>{{ result.classification }}</h2>
+                            <p class="confidence-score">
+                                Confidence: {{ result.confidence }}%
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="/static/js/script.js"></script>
+</body>
+</html>
